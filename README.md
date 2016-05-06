@@ -7,4 +7,3 @@ Time | syllabus
 **13:00 - 13:10** | *Lecture*: Introduction(Mirko)
 **13:10 - 14:00** | *Hands-on*: Installing software in CSC and upload datasets. (Bruno)
 **14:00 - 16:30** | *Hands-on/Lecture*: Assembly module. (Sion) 
-**16:00 - 16:30** | *Hands-on*: Running batch mode assemblies of other datasets.(Mirko + Bruno)
