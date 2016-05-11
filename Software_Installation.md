@@ -173,7 +173,7 @@ To use **MiniKrakenDB**, first create a new directory in your *wrk* directory an
 
 Uncompress the *minikraken.tgz* file into the minikrakendb directory
 
-    tar -zvf ./minikraken.tgz ./minikrakendb
+    tar -zxf ./minikraken.tgz ./minikrakendb
 
 The database can now be accessed in the path`/wrk/<username>/minikrakendb`
 
