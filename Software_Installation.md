@@ -91,8 +91,10 @@ To install our program's dependencies, run
 
     python -m pip.__main__ install biopython --user
     python -m pip.__main__ install HTseq --user
-    python -m pip.__main__ install numpy --user
-    python -m pip.__main__ install matplotlib --user
+    python -m pip.__main__ install nose --user --upgrade
+    python -m pip.__main__ install distribute --user --upgrade
+    python -m pip.__main__ install numpy --user --upgrade
+    python -m pip.__main__ install matplotlib --user --upgrade
 
 In case these dependencies are already installed, upgrade to the newest version with the command *--upgrade*
 
