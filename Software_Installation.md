@@ -91,28 +91,18 @@ To install our program's dependencies, run
 
     python -m pip.__main__ install biopython --user
     python -m pip.__main__ install HTseq --user
-    python -m pip.__main__ install numpy --user
-    python -m pip.__main__ install matplotlib --user
+    python -m pip.__main__ install nose --user --upgrade
+    python -m pip.__main__ install distribute --user --upgrade
+    python -m pip.__main__ install numpy --user --upgrade
+    python -m pip.__main__ install matplotlib --user --upgrade
 
-In case these dependencies are already installed, upgrade to the newest version with the command *--upgrade*
+Since some of the dependencies are already installed, upgrade we upgraded it to the newest version with the command *--upgrade*
 
     python -m pip.__main__ install numpy --upgrade --user
 
 ###4. Access to the course data sets
 
-Data sets that will be used throughout the course are available in a shared folder. Link to the link to the shared folder using the command
-
-    cd /wrk/<username>
-    #wrk dir is used for data storage
-    #change <username> by your user account
-    
-    ln -s /wrk/mirossi/shared_all ./shared
-
-**DO NOT modify the shared folder directly**. To access to the data, first create a new directory in your *wrk* directory.
-  
-    mkdir ./course_data
-
-Then, copy the contents of the shared folder using the command:
+Data sets that will be used throughout the course are available in a shared folder. **DO NOT modify the shared folder directly**. To access to the data, copy the contents of the shared folder using the command
 
     cp -r ./shared ./course_data
  
@@ -124,8 +114,7 @@ Then, copy the contents of the shared folder using the command:
 
 To install **QUAST** (http://bioinf.spbau.ru/quast), first we need to download its source code. Start by creating a new directory to install **QUAST** on your *bact_pop_course* directory.
 
-    cd ~/appl_taito/bact_pop_course
-    mkdir quast 
+    cd ~/appl_taito/bact_pop_course 
 
 Then, download its source code using the following command:
 
@@ -134,6 +123,11 @@ Then, download its source code using the following command:
 After the download, a new compressed file, *quast-4.0.tar.gz*, will be available on the current directory. Uncompress it using
 
     tar -xzf quast-4.0.tar.gz
+    
+
+Then , remove the compressed file
+
+    rm quast-4.0.tar.gz
 
 **QUAST** automatically compiles all its sub-parts if needed on its first use. Access to the uncompressed *quast-4.0* folder and run the **QUAST** test command.
 
@@ -161,19 +155,25 @@ After completing, create a new directory where you want to have **Kraken** insta
     mkdir ../kraken
     sh ./install_kraken.sh ../kraken
 
-The next step is to define **Kraken**'s. It needs to be linked to a database to be able to classify sequences. In this course, we will use **MiniKrakenDB**, a reduced standard database constructed from complete bacterial, archaeal, and viral genomes in RefSeq (from 2014).
+Remove the *kraken_installer* folder using
+
+    
+
+The next step is to define **Kraken**'s database. It needs to be linked to a database to be able to classify sequences. In this course, we will use **MiniKrakenDB**, a reduced standard database constructed from complete bacterial, archaeal, and viral genomes in RefSeq (from 2014).
 
 To use **MiniKrakenDB**, first create a new directory in your *wrk* directory and download the database files.
 
     cd /wrk/<username>
     mkdir minikrakendb
+    cd minikrakendb
     wget https://ccb.jhu.edu/software/kraken/dl/minikraken.tgz
 
 Uncompress the *minikraken.tgz* file into the minikrakendb directory
 
-    tar -zvf ./minikraken.tgz ./minikrakendb
+    tar -zxf ./minikraken.tgz
+    rm minikraken.tgz
 
-The database can now be accessed in the path`/wrk/<username>/minikrakendb`
+The database can now be accessed in the path`/wrk/<username>/minikrakendb/minikraken_20141208`
 
 **Kraken** usage will be covered at "*Hands-on/Lecture: Assembly module."*.
 
@@ -184,12 +184,13 @@ The database can now be accessed in the path`/wrk/<username>/minikrakendb`
 **ReMatCh** source code is available at GitHub.  As so, first we are going to create a new directory on *bact_pop_course* folder and clone its repository into the newly created directory.
 
     cd ~/appl_taito/bact_pop_course
-    mkdir rematch
-    git clone https://github.com/bfrgoncalves/ReMatCh.git .
+    git clone https://github.com/bfrgoncalves/ReMatCh.git
+    #This will create a new folder with the name of the repository
 
  Since we are going to run **ReMatCh** in multiple samples simultaneously, we need o select a different version of the application from the repository. Git allows to develop and access to different versions of a program by creating *branches*. In this case, we are going to change from the *master* branch to the *course_version* branch using
  
 
+    cd ReMatCh
     git checkout course_version
  
  We are now in the **ReMatCh** version that will be used in the course. 
@@ -199,15 +200,17 @@ ReMatCh requires BEDtools (> v.2.17), a version that is not available by default
 However, you can install it by creating a new directory to include BEDtools.
 
     cd ~/appl_taito/bact_pop_course 
-    mkdir bedtools
+    mkdir bedtools-2.25.0
 
 Then, download its source code 
 
+    cd bedtools-2.25.0
     wget https://github.com/arq5x/bedtools2/releases/download/v2.25.0/bedtools-2.25.0.tar.gz
 
 Extract the *bedtools-2.25.0.tar.gz* file using
 
     tar -xf bedtools-2.25.0.tar.gz
+    rm bedtools-2.25.0.tar.gz
 
 Install the software by accessing to the newly created *bedtools2* folder and by typing the *make* command.
 
@@ -219,7 +222,7 @@ ReMatCh usage will be covered later in the "*Hands-on/Lecture: ReMatch: using ma
 
 ###8. Installing Allele Call scripts (chewBBACA) 
 
-**chewBBACA** (proposed name) (https://github.com/mickaelsilva/bacterial_wgMLST) is a tool with a set of scripts to perform bacterial *wgMLST*. It will be used to define and assign unique numeric allelic profiles for each query genome by comparison with reference sequences.
+**chewBBACA** (proposed name) (https://github.com/mickaelsilva/bacterial_wgMLST) is a tool with a set of scripts to perform bacterial *wgMLST*/*cgMLST*. It will be used to define and assign unique numeric allelic profiles for each query genome by comparison with reference sequences.
 
 **chewBBACA** source code is available at GitHub and can be cloned to your user account. Start by creating a new folder and then clone the repository.
 
@@ -227,7 +230,7 @@ ReMatCh usage will be covered later in the "*Hands-on/Lecture: ReMatch: using ma
     mkdir chewbbaca
     git clone https://github.com/mickaelsilva/bacterial_wgMLST.git .
 
-cheBBACA usage will be covered on "*Hands-on: assembly + allele call campy data.*".
+chewBBACA usage will be covered on "*Hands-on: assembly + allele call campy data.*".
 
 ###9. Installing FastTree
 
@@ -243,6 +246,8 @@ Download its source code using the command
 
 After the download is completed, we need to install **FastTree** itself. We do that by running the following command, which compiles the application
 
+    
+    cd FastTree
     gcc -DNO_SSE -O3 -finline-functions -funroll-loops -Wall -o FastTree FastTree.c -lm
 
  To test if **FastTree** is installed, access to it in your current folder using
@@ -265,17 +270,17 @@ Some of the programs can be added to the PATH so that their executables can be r
     #Adding BEDtools to PATH
     export PATH="wrk/<username>/shared/Friday20thMay/dependencies/bedtools2/bin:$PATH"
     
+    #Adding QUAST to PATH
+    export PATH="wrk/<username>/bact_pop_course/quast-4.0:$PATH"
+    
+    #Adding ReMatCh to PATH
+    export PATH="~/appl_taito/bact_pop_course/rematch:$PATH"
+    
     #Change <username> by your user account
 
 **NOTE**: This step must be made every time a new session is started.
 
-For **QUAST**, **ReMatCh** and **chewBBACA** you still have to access to them directly on their installed directories.
-
-    #Full path for QUAST
-    ~/appl_taito/bact_pop_course/quast/quast-4.0/quast.py
-    
-    #Full path for ReMatCh
-	~/appl_taito/bact_pop_course/rematch/rematch.py
+For **chewBBACA** you still have to access to them directly on their installed directories.
 	
 	#Full path for chewBBACA
 	~/appl_taito/bact_pop_course/chewbbaca/allele call/cds_based/alleleCalling_ORFbased_protein_main3_local.py
