@@ -15,6 +15,7 @@ In this first module we will set up your CSC user area with all the software and
  7. Installing ReMatCh
  8. Installing Allele Call scripts (chewBBACA) 
  9. Installing FastTree
+ 10. Adding executables to the PATH
 
 ###1. Accessing to the CSC user account
 
@@ -32,6 +33,12 @@ In this installation guide we will log in to *taito-shell*. Open a Terminal wind
 Or configure PuTTY (Windows) with the host name *taito-shell.csc.fi* and your username.
 
 After typing your password, you will be redirected to your user area on Taito super cluster. 
+
+For the purpose of the course and to organize the following software installation, start by creating a new folder on the *appl_taito* directory where you will store all programs.
+
+    cd ~/appl_taito
+    #Dir for users' own application software
+    mkdir bact_pop_course
 
 
 ###2. Loading software modules
@@ -63,9 +70,9 @@ Some of the following programs are written in Python programming language and ha
  - Numpy (http://www.numpy.org/)
  - matplotlib (http://matplotlib.org/)
 
-These modules can easily be installed in your user area by using pip, a package manager for Python. To install pip, start by downloading the *get-pip.py* file to your *appl_taito* directory.
+These modules can easily be installed in your user area by using pip, a package manager for Python. To install pip, start by downloading the *get-pip.py* file to your *bact_pop_course* directory.
 
-    cd ~/appl_taito
+    cd ~/appl_taito/bact_pop_course
     wget https://bootstrap.pypa.io/get-pip.py
 
 Then, run the *get-pip.py* file using the following command:
@@ -96,7 +103,7 @@ In case these dependencies are already installed, upgrade to the newest version 
 Data sets that will be used throughout the course are available in a shared folder. Link to the link to the shared folder using the command
 
     cd /wrk/<username>
-    
+    #wrk dir is used for data storage
     #change <username> by your user account
     
     ln -s /wrk/mirossi/shared_all ./shared
@@ -115,9 +122,9 @@ Then, copy the contents of the shared folder using the command:
  
 ###5. Installing QUAST
 
-To install **QUAST**, first we need to download its source code. Start by creating a new directory to install **QUAST** on your *appl_taito* directory.
+To install **QUAST** (http://bioinf.spbau.ru/quast), first we need to download its source code. Start by creating a new directory to install **QUAST** on your *bact_pop_course* directory.
 
-    cd ~/appl_taito
+    cd ~/appl_taito/bact_pop_course
     mkdir quast 
 
 Then, download its source code using the following command:
@@ -139,9 +146,9 @@ After the download, a new compressed file, *quast-4.0.tar.gz*, will be available
 
 ###6. Installing Kraken
 
-**Kraken** is a system for assigning taxonomic classification to short DNA sequences. To install **Kraken**, first create a directory where you want to have **Kraken** source code cloned inside your *appl_taito* directory.
+**Kraken** (https://ccb.jhu.edu/software/kraken/) is a system for assigning taxonomic classification to short DNA sequences. To install **Kraken**, first create a directory where you want to have **Kraken** source code cloned inside your *bact_pop_course* directory.
 
-    cd ~/appl_taito
+    cd ~/appl_taito/bact_pop_course
     mkdir kraken_installer
 
 Clone **Kraken**'s repository using the command
@@ -172,11 +179,11 @@ The database can now be accessed in the path`/wrk/<username>/minikrakendb`
 
 ###7. Installing ReMatCh
 
-**ReMatCh** is an application which combines a set of bioinformatic tools for reads mapping against a reference. It indexes the reference sequence, maps the reads against it, finds the allelic variants and produces a consensus sequence.
+**ReMatCh** (https://github.com/bfrgoncalves/ReMatCh) is an application which combines a set of bioinformatic tools for reads mapping against a reference. It indexes the reference sequence, maps the reads against it, finds the allelic variants and produces a consensus sequence.
 
-**ReMatCh** source code is available at GitHub.  As so, first we are going to create a new directory on *appl_taito* folder and clone its repository into the newly created directory.
+**ReMatCh** source code is available at GitHub.  As so, first we are going to create a new directory on *bact_pop_course* folder and clone its repository into the newly created directory.
 
-    cd ~/appl_taito
+    cd ~/appl_taito/bact_pop_course
     mkdir rematch
     git clone https://github.com/bfrgoncalves/ReMatCh.git .
 
@@ -187,15 +194,36 @@ The database can now be accessed in the path`/wrk/<username>/minikrakendb`
  
  We are now in the **ReMatCh** version that will be used in the course. 
 
+ReMatCh requires BEDtools (> v.2.17), a version that is not available by default in the **biokit** module. In this tutorial it will be available in the course shared directory on `wrk/<username>/shared/Friday20thMay/dependencies/bedtools2`
+
+However, you can install it by creating a new directory to include BEDtools.
+
+    cd ~/appl_taito/bact_pop_course 
+    mkdir bedtools
+
+Then, download its source code 
+
+    wget https://github.com/arq5x/bedtools2/releases/download/v2.25.0/bedtools-2.25.0.tar.gz
+
+Extract the *bedtools-2.25.0.tar.gz* file using
+
+    tar -xf bedtools-2.25.0.tar.gz
+
+Install the software by accessing to the newly created *bedtools2* folder and by typing the *make* command.
+
+    cd bedtools2
+    make
+    #This will compile the software so that it can be used.
+
 ReMatCh usage will be covered later in the "*Hands-on/Lecture: ReMatch: using mapping approaches for AMR/virulence gene finding from reads.*".
 
 ###8. Installing Allele Call scripts (chewBBACA) 
 
-**chewBBACA** (proposed name) is a tool with a set of scripts to perform bacterial *wgMLST*. It will be used to define and assign unique numeric allelic profiles for each query genome by comparison with reference sequences.
+**chewBBACA** (proposed name) (https://github.com/mickaelsilva/bacterial_wgMLST) is a tool with a set of scripts to perform bacterial *wgMLST*. It will be used to define and assign unique numeric allelic profiles for each query genome by comparison with reference sequences.
 
 **chewBBACA** source code is available at GitHub and can be cloned to your user account. Start by creating a new folder and then clone the repository.
 
-    cd ~/appl_taito
+    cd ~/appl_taito/bact_pop_course
     mkdir chewbbaca
     git clone https://github.com/mickaelsilva/bacterial_wgMLST.git .
 
@@ -203,10 +231,10 @@ cheBBACA usage will be covered on "*Hands-on: assembly + allele call campy data.
 
 ###9. Installing FastTree
 
-**FastTree** is an application that infers approximately-maximum-likelihood phylogenetic trees from alignments of nucleotide or protein sequences.
+**FastTree** (http://meta.microbesonline.org/fasttree/) is an application that infers approximately-maximum-likelihood phylogenetic trees from alignments of nucleotide or protein sequences.
 To install **FastTree**, start by creating a new folder where you will store the application.
 
-    cd ~/appl_taito
+    cd ~/appl_taito/bact_pop_course
     mkdir FastTree
 
 Download its source code using the command
@@ -223,3 +251,31 @@ After the download is completed, we need to install **FastTree** itself. We do t
     ./FastTree
 
 **FastTree** will be covered on "*Hands-on: working with recombinant population (some-up working-groups results and population analysis)*".
+
+### 10.Adding executables to the PATH
+
+Some of the programs can be added to the PATH so that their executables can be reachable without accessing to the particular folder where they are installed. **Kraken**, **FastTree** and **BEDtools** can be added to the PATH using
+
+    #Adding Kraken to PATH 
+    export PATH="~/appl_taito/bact_pop_course/kraken:$PATH"
+    
+    #Adding FastTree to PATH
+    export PATH="~/appl_taito/bact_pop_course/FastTree:$PATH"
+    
+    #Adding BEDtools to PATH
+    export PATH="wrk/<username>/shared/Friday20thMay/dependencies/bedtools2/bin:$PATH"
+    
+    #Change <username> by your user account
+
+**NOTE**: This step must be made every time a new session is started.
+
+For **QUAST**, **ReMatCh** and **chewBBACA** you still have to access to them directly on their installed directories.
+
+    #Full path for QUAST
+    ~/appl_taito/bact_pop_course/quast/quast-4.0/quast.py
+    
+    #Full path for ReMatCh
+	~/appl_taito/bact_pop_course/rematch/rematch.py
+	
+	#Full path for chewBBACA
+	~/appl_taito/bact_pop_course/chewbbaca/allele call/cds_based/alleleCalling_ORFbased_protein_main3_local.py
