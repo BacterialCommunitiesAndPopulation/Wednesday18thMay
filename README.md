@@ -2,6 +2,7 @@
 
 From 13:00 to 16:30
 Morning *Working with bacterial communities*
+
 Afternoon *Working with bacterial populations*
 
 Time | syllabus
