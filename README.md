@@ -1,10 +1,8 @@
 # Wednesday18thMay
 
-From 13:00 to 16:30
+From 09:00 to 13:00 *Working with bacterial communities*
 
-Morning *Working with bacterial communities*
-
-Afternoon *Working with bacterial populations*
+From 13:00 to 16:30 *Working with bacterial populations*
 
 Time | syllabus
 -----| --------
