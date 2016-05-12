@@ -102,13 +102,13 @@ Since some of the dependencies are already installed, upgrade we upgraded it to 
 
 ###4. Access to the course data sets
 
-Data sets that will be used throughout the course are available in a shared folder. **DO NOT modify the shared folder directly**. To access to the data, copy the contents of the shared folder using the command
+Data sets that will be used throughout the course are available in a shared folder. **DO NOT modify the shared folder directly**. To access to the data, copy the contents of the shared folder to your *wrk* directory using the command
 
-    cp -r ./shared ./course_data
+    cd /wrk/<username>
+    cp -r /wrk/mirossi/shared_all /wrk/<username>
+    #change <username> by your user account
  
- Now you have an independent copy of the data sets that can be used and modified in your user area. To finish, unlink from the shared folder using the command
-
-    unlink ./shared
+ A copy of the shared data is know available at `/wrk/<username>/shared_all` and can be modified.
  
 ###5. Installing QUAST
 
@@ -157,7 +157,9 @@ After completing, create a new directory where you want to have **Kraken** insta
 
 Remove the *kraken_installer* folder using
 
-    
+    cd ..
+    #Moves to parent directory
+    rm -rf kraken_installer
 
 The next step is to define **Kraken**'s database. It needs to be linked to a database to be able to classify sequences. In this course, we will use **MiniKrakenDB**, a reduced standard database constructed from complete bacterial, archaeal, and viral genomes in RefSeq (from 2014).
 
@@ -168,7 +170,7 @@ To use **MiniKrakenDB**, first create a new directory in your *wrk* directory an
     cd minikrakendb
     wget https://ccb.jhu.edu/software/kraken/dl/minikraken.tgz
 
-Uncompress the *minikraken.tgz* file into the minikrakendb directory
+Uncompress the *minikraken.tgz* file into the *minikrakendb* directory
 
     tar -zxf ./minikraken.tgz
     rm minikraken.tgz
@@ -228,6 +230,7 @@ ReMatCh usage will be covered later in the "*Hands-on/Lecture: ReMatch: using ma
 
     cd ~/appl_taito/bact_pop_course
     mkdir chewbbaca
+    cd chewbbaca
     git clone https://github.com/mickaelsilva/bacterial_wgMLST.git .
 
 chewBBACA usage will be covered on "*Hands-on: assembly + allele call campy data.*".
@@ -239,6 +242,7 @@ To install **FastTree**, start by creating a new folder where you will store the
 
     cd ~/appl_taito/bact_pop_course
     mkdir FastTree
+    cd FastTree
 
 Download its source code using the command
 
@@ -246,8 +250,7 @@ Download its source code using the command
 
 After the download is completed, we need to install **FastTree** itself. We do that by running the following command, which compiles the application
 
-    
-    cd FastTree
+   
     gcc -DNO_SSE -O3 -finline-functions -funroll-loops -Wall -o FastTree FastTree.c -lm
 
  To test if **FastTree** is installed, access to it in your current folder using
@@ -268,15 +271,16 @@ Some of the programs can be added to the PATH so that their executables can be r
     export PATH="~/appl_taito/bact_pop_course/FastTree:$PATH"
     
     #Adding BEDtools to PATH
-    export PATH="wrk/<username>/shared/Friday20thMay/dependencies/bedtools2/bin:$PATH"
+    export PATH="/wrk/<username>/shared_all/Friday20thMay/dependencies/bedtools2/bin:$PATH"
+    #change <username> by your user account
     
     #Adding QUAST to PATH
-    export PATH="wrk/<username>/bact_pop_course/quast-4.0:$PATH"
+    export PATH="~/appl_taito/bact_pop_course/quast-4.0:$PATH"
     
     #Adding ReMatCh to PATH
     export PATH="~/appl_taito/bact_pop_course/rematch:$PATH"
     
-    #Change <username> by your user account
+    
 
 **NOTE**: This step must be made every time a new session is started.
 
