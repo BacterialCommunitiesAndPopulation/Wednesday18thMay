@@ -15,7 +15,8 @@ In this first module we will set up your CSC user area with all the software and
  7. Installing ReMatCh
  8. Installing Allele Call scripts (chewBBACA) 
  9. Installing FastTree
- 10. Adding executables to the PATH
+ 10. Installing FigTree
+ 11. Adding executables to the PATH
 
 ###1. Accessing to the CSC user account
 
@@ -102,13 +103,14 @@ Since some of the dependencies are already installed, upgrade we upgraded it to 
 
 ###4. Access to the course data sets
 
-Data sets that will be used throughout the course are available in a shared folder. **DO NOT modify the shared folder directly**. To access to the data, copy the contents of the shared folder to your *wrk* directory using the command
+Data sets that will be used throughout the course are available in a shared folder. **DO NOT modify the shared folder directly**. To access to the data, sync the contents of the shared folder to your *wrk* directory using the command
 
     cd /wrk/<username>
-    cp -r /wrk/mirossi/shared_all /wrk/<username>
+    mkdir course_data
+    rsync -rtv /wrk/mirossi/shared_all /wrk/<username>/course_data/
     #change <username> by your user account
  
- A copy of the shared data is know available at `/wrk/<username>/shared_all` and can be modified.
+ A copy of the shared data is know available at `/wrk/<username>/course_data/shared_all` and can be modified.
  
 ###5. Installing QUAST
 
@@ -260,7 +262,20 @@ After the download is completed, we need to install **FastTree** itself. We do t
 
 **FastTree** will be covered on "*Hands-on: working with recombinant population (some-up working-groups results and population analysis)*".
 
-### 10.Adding executables to the PATH
+###10. Installing FigTree
+
+FigTree (http://tree.bio.ed.ac.uk/software/figtree/) is a graphical viewer of phylogenetic trees. Its source code is available at `/wrk/<username>/shared_all/Wednesday18thMay/FigTree_v1.4.2`
+
+To run the application, use the command
+
+    cd /wrk/<username>/shared_all/Wednesday18thMay/FigTree_v1.4.2
+    #change <username> by your user account
+	
+	java -jar lib/figtree.jar
+
+**FigTree** will be used at *Hands-on: working with clonal population (using Renibacterium data)*.
+
+### 11.Adding executables to the PATH
 
 Some of the programs can be added to the PATH so that their executables can be reachable without accessing to the particular folder where they are installed. **Kraken**, **FastTree** and **BEDtools** can be added to the PATH using
 
@@ -278,7 +293,7 @@ Some of the programs can be added to the PATH so that their executables can be r
     export PATH="~/appl_taito/bact_pop_course/quast-4.0:$PATH"
     
     #Adding ReMatCh to PATH
-    export PATH="~/appl_taito/bact_pop_course/rematch:$PATH"
+    export PATH="~/appl_taito/bact_pop_course/ReMatCh:$PATH"
     
     
 
@@ -286,5 +301,8 @@ Some of the programs can be added to the PATH so that their executables can be r
 
 For **chewBBACA** you still have to access to them directly on their installed directories.
 	
-	#Full path for chewBBACA
+	#Full path for chewBBACA allele call
+	~/appl_taito/bact_pop_course/chewbbaca/allele call/cds_based/alleleCalling_ORFbased_protein_main3_local.py
+	
+	#Full path for chewBBACA CreateSchema
 	~/appl_taito/bact_pop_course/chewbbaca/allele call/cds_based/alleleCalling_ORFbased_protein_main3_local.py
