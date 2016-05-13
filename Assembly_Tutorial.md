@@ -107,9 +107,9 @@ From the FastQC report we have identified that there is sequence present in our 
 
 Our reads contain adapter sequence. Lets tackle that first. We can also remove poor quality sequence during the same step.
 
-Adapter content can be removed using a number of programs. Popular choices include sickle, cutadapt and trimmomatic. For this exercise I have chosen [Trimmomatic](http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf) as it is fast, flexible and has easily understandable syntax. 
+Adapter content can be removed using a number of programs. Popular choices include Sickle, Cutadapt and Trimmomatic. For this exercise I have chosen [Trimmomatic](http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf) as it is fast, flexible and has easily understandable syntax. 
 
-*Note that trimmomatic will run your commands sequentially so if you filter your reads by minimum length before trimming adapter sequence you will get a different result than the other way around.*
+*Note that Trimmomatic will run your commands sequentially so if you filter your reads by minimum length before trimming adapter sequence you will get a different result than the other way around.*
 
 ```
 trimmomatic PE ERR327970_1.fastq.gz ERR327970_2.fastq.gz ERR327970_1.paired.fastq.gz ERR327970_1.unpaired.fastq.gz ERR327970_2.paired.fastq.gz ERR327970_2.unpaired.fastq.gz ILLUMINACLIP:../PE_All.fasta:2:30:10 LEADING:20 TRAILING:3 SLIDINGWINDOW:4:20 CROP:94 MINLEN:20
@@ -122,7 +122,7 @@ So what I have I done here:
 - LEADING and TRAILING : commands commonly used to remove poor quality sequence from the beginning and end of reads (<phred score 2)
 - ILLUMINACLIP: Removes adapter sequences specified by the user. 
 - SLIDINGWINDOW : Removes bases below this quality in a moving window from the end --> beginning of the read.
-- CROP: There were overabundant K-mers at the end of the reads which could confound assembly, this crops reads to this length.
+- CROP: There were over-abundant K-mers at the end of the reads which could confound assembly, this crops reads to this length.
 - MINLEN: Reads below this side are useless for assembly as we will not be using k-mers below this size. 
 
 *Now check your trimmed paired reads using FastQC.*
@@ -150,7 +150,7 @@ The top taxonomic assignment for our reads is Renibacterium. We also have a larg
 
 ### Remove Contaminants
 
-From the kraken output it is clear we have some phiX sequences in our sample. PhiX is used as a calibration control during Illumina sequencing. We will want to remove these reads before assembly. This can be considered a model contaminant. Note that this approach would be equally valid for other known contaminants.  
+From the Kraken output it is clear we have some PhiX sequences in our sample. PhiX is used as a calibration control during Illumina sequencing. We will want to remove these reads before assembly. This can be considered a model contaminant. Note that this approach would be equally valid for other known contaminants.  
 
 We will map the reads to the PhiX genome sequence. We will then filter all of the reads that matched PhiX and convert our files back to .fastq format for assembly. 
 
@@ -177,7 +177,7 @@ Now check you have an identical number of reads in each file (They must be match
 
 Re-run kraken and analyse the output. 
 
-We may still have a reasonable amount of Vibrio DNA. We will deal with that after assembly.  
+We may still have a reasonable amount of _Vibrio_ DNA. We will deal with that after assembly.  
 
 ### Assembly 
 
@@ -213,7 +213,7 @@ mkdir Contig_QC
 quast.py -t 6 -R ATCC_33209.fasta Assembly/contigs.fasta Assembly/scaffolds.fasta -o Contig_QC/RawContigs
 ```
 
-Quast generates a number of assembly statistic quickly and compares the assemblies to the reference genome (-R). It can be run without a reference genome to generate just the assembly stats. 
+Quast generates a number of assembly statistic quickly and compares the assemblies to the reference genome (-R). It can be run without a reference genome to generate just the assembly statistics. 
 
 Using your sftp client (e.g. WinSCP or Filezilla) copy report.pdf and alignment.svg to your local computer.
 
@@ -226,14 +226,14 @@ The quast report contains a number of pertinent statistics. I will cover only a 
 - Duplication Ratio: the total number of aligned bases in the assembly divided by the total number of aligned bases in the reference genome
 - Misassemblies : An important statistic which may be misleading. A large genomic rearrangement would be classified as a misassembly, but it could be an important finding.
 
-Open alignment.svg. Can you see any sections where the contigs have aligned to the refenece in the wrong orientation (red).     
+Open alignment.svg. Can you see any sections where the contigs have aligned to the reference in the wrong orientation (red).     
 
 In some situations (often if there is residual adapter or phiX sequence) the scaffold.fasta file may contain a greater number of misassemblies than contig.fasta. 
 However, the scaffold.fasta will often have a larger N50 or fewer contigs and therefore is 'better' in that respect. 
 In my opinion fewer misassemblies is preferred. For further analysis we will use the contigs.fasta. 
 
 The header of each contig will have the format NODE_X_length_Y_cov_Z 
-- The node number is arbitary, but they will often be assorted in decending size order.
+- The node number is arbitary, but they will often be assorted in descending size order.
 - length in bp
 - k-mer coverage (this is the coverage of the last K-mer used by spades and does NOT represent read coverage but can often be used as a proxy). 
 
