@@ -22,7 +22,7 @@ For this tutorial we will be rigourously QCing and assembling a bacterial genome
 
 The example genomes we will be using are *Renibacterium salmoninarum* isolates taken from this publication - [Microevolution of *Renibacterium salmoninarum*: evidence for intercontinental dissemination associated with fish movements](http://www.nature.com/ismej/journal/v8/n4/full/ismej2013186a.html)
 
-We will be using the finished reference genome ATCC_33209 from - [Genome sequence of the fish pathogen *Renibacterium salmoninarum* suggests reductive evolution away from an environmental Arthrobacter ancestor.](http://www.ncbi.nlm.nih.gov/pubmed/18723615). This has been reannottated for you with Prokka. 
+We will be using the finished reference genome ATCC_33209 from - [Genome sequence of the fish pathogen *Renibacterium salmoninarum* suggests reductive evolution away from an environmental Arthrobacter ancestor](http://www.ncbi.nlm.nih.gov/pubmed/18723615). This has been reannottated for you with Prokka. 
 
 The workflow will be as follows:
 - Taxonomic assignment of reads.
@@ -82,7 +82,7 @@ Copy your reads to this directory using `cp`.
 
 ### Read QC
 
-We need to be able to assess the quality of our fastq file. We will use a program called [FastqQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/). 
+We need to be able to assess the quality of our fastq file. We will use a program called [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/). 
 
 Fastqc can be run with a user interface or programatically. 
 
@@ -99,13 +99,13 @@ This will generate a html report for each file. Using your sftp client (e.g. Win
 Take note of the over-represented sequences, Illumina adapter content and k-mer content tabs. 
 
 Question: 
-- What do you notice about the quality of the forward and reverse reads?
+- _What do you notice about the quality of the forward and reverse reads?_
 
 ### Read trimming and adapter removal
 
 From the FastQC report we have identified that there is sequence present in our reads that has been identified as Illumina Single End PCR Primer 1. 
 
-Our reads have adapter sequence. Lets tackle that first. We can also remove poor quality sequence during the same step.
+Our reads contain adapter sequence. Lets tackle that first. We can also remove poor quality sequence during the same step.
 
 Adapter content can be removed using a number of programs. Popular choices include sickle, cutadapt and trimmomatic. For this exercise I have chosen [Trimmomatic](http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf) as it is fast, flexible and has easily understandable syntax. 
 
@@ -119,13 +119,13 @@ You will be left with paired and unpaired reads for both forward and reverse fil
 
 So what I have I done here:
 - Our reads are paired reads so I used PE - pair end mode.
-- LEADING and TRAILING : commands commonly used to remove poor quality sequence from the beggining and end of reads (<phred score 2)
+- LEADING and TRAILING : commands commonly used to remove poor quality sequence from the beginning and end of reads (<phred score 2)
 - ILLUMINACLIP: Removes adapter sequences specified by the user. 
 - SLIDINGWINDOW : Removes bases below this quality in a moving window from the end --> beginning of the read.
 - CROP: There were overabundant K-mers at the end of the reads which could confound assembly, this crops reads to this length.
 - MINLEN: Reads below this side are useless for assembly as we will not be using k-mers below this size. 
 
-*Now check your paired reads again using FastQC.*
+*Now check your trimmed paired reads using FastQC.*
 
 ### K-mer correction/Normalisation
 We will not be performing any k-mer correction/read normalisation here. However, be aware that this is a possible step during read filtering and may improve assembly quality. Possible software includes Quake, BBnorm and Musket.
@@ -146,10 +146,11 @@ kraken-translate --db /Path/to/MiniKraken/ kraken_result > sequences.labels
 awk '{print $4}' sequences.labels | sort | uniq -c | sort -nr
 ```
 
-Next to Renibacterium we have a large number of reads classified as phage in our sample. Open the file and see what these are. 
+The top taxonomic assignment for our reads is Renibacterium. We also have a large number of reads classified as phage in our sample. Open the file locally and see what these are. 
 
 ### Remove Contaminants
-From the kraken output it is clear we have some phiX sequences in our sample. These are uses as a calibration control during the sequencing run. We will want to remove these reads before assembly. This can be considered a model contaminant. But this approach would be suitable for other known contaminants.  
+
+From the kraken output it is clear we have some phiX sequences in our sample. PhiX is used as a calibration control during Illumina sequencing. We will want to remove these reads before assembly. This can be considered a model contaminant. Note that this approach would be equally valid for other known contaminants.  
 
 We will map the reads to the PhiX genome sequence. We will then filter all of the reads that matched PhiX and convert our files back to .fastq format for assembly. 
 
@@ -219,9 +220,9 @@ Using your sftp client (e.g. WinSCP or Filezilla) copy report.pdf and alignment.
 ### Assembly QC
 
 The quast report contains a number of pertinent statistics. I will cover only a few below
-- Assembly Length / Genome Fraction : How much of our target genome have we recovered? Have we recovered more than the refereence length and therefore do we have plasmids/contamination? 
+- Assembly Length / Genome Fraction : How much of our target genome have we recovered? Have we recovered more than the reference length and therefore do we have plasmids or do we have contamination? 
 - N50/N75 (NG50/NG75) : the length for which the collection of all contigs of that length or longer covers at least 50%/75% an assembly (NG = reference genome). Typically used as a measure of how well a genome has assembled.
-- L50/75 : is the number of contigs equal to or longer than N50/N75.
+- L50/L75 : is the number of contigs equal to or longer than N50/N75.
 - Duplication Ratio: the total number of aligned bases in the assembly divided by the total number of aligned bases in the reference genome
 - Misassemblies : An important statistic which may be misleading. A large genomic rearrangement would be classified as a misassembly, but it could be an important finding.
 
@@ -242,8 +243,8 @@ The header of each contig will have the format NODE_X_length_Y_cov_Z
 Again, we will use kraken:
 
 ```
-kraken --preload --db /mnt/data/bioinformatics/Databases/MiniKraken/ Assembly/contigs.fasta --threads 6 --output kraken_result_contigs
-kraken-translate --db /mnt/data/bioinformatics/Databases/MiniKraken/ kraken_result_contigs > sequence_contigs.labels
+kraken --preload --db path/to/MiniKraken/ Assembly/contigs.fasta --threads 6 --output kraken_result_contigs
+kraken-translate --db path/to/MiniKraken/ kraken_result_contigs > sequence_contigs.labels
 awk '{print $4}' sequence_contigs.labels | sort | uniq -c | sort -nr # Summary (Save with > file.txt appended to end)
 ```
 
@@ -302,8 +303,8 @@ grep "^SN" contigs.stats
 ```
 
 Questions:
-- How many of our filtered reads mapped to our assembly? 
-- How many of them were correctly paired? 
+- _How many of our filtered reads mapped to our assembly?_ 
+- _How many of them were correctly paired?_
 
 _Record the results in the spreadsheet._  
 
@@ -330,8 +331,8 @@ c_removed=$(cat temp.count); echo "Number of removed contigs = $c_removed"
 ```
 
 Questions:
-- How many contigs did we remove? 
-- How many remain? 
+- _How many contigs did we remove?_
+- _How many remain?_
 
 *Run kraken on our filtered set of contigs*
 
@@ -355,8 +356,8 @@ grep "^>" contigs.c_l_filtered.fasta | wc -l
 What species do these contigs represent? *Run Kraken again*
 
 ```
-kraken --preload --db /mnt/data/bioinformatics/Databases/MiniKraken/ contigs.c_l_filtered.fasta --threads 6 --output kraken_result_contigs_postfilter
-kraken-translate --db /mnt/data/bioinformatics/Databases/MiniKraken/ kraken_result_contigs_postfilter > sequence_contigs_postfilter.labels
+kraken --preload --db path/to/MiniKraken/ contigs.c_l_filtered.fasta --threads 6 --output kraken_result_contigs_postfilter
+kraken-translate --db path/to/MiniKraken/ kraken_result_contigs_postfilter > sequence_contigs_postfilter.labels
 awk '{print $4}' sequence_contigs_postfilter.labels | sort | uniq -c | sort -nr # Summary (Save with > file.txt appended to end)
 ```
 
@@ -387,9 +388,9 @@ The use of -G *.ggf  also allows for the comparison of our annotated genome to t
 Using your sftp client (e.g. WinSCP or Filezilla) copy the content of the quast report folder to your local machine. 
 
 Use ERR3279*.gff_gaps.txt to answer the question:
-- How mant CDSs/genes were not found in our samples?
-- Which CDSs were not detected in our sample? 
-- Is there a trend in the missing genes?
+- _How mant CDSs/genes were not found in our samples?_
+- _Which CDSs were not detected in our sample?_ 
+- _Is there a trend in the missing genes?_
 
 ### Visually comparing contigs to reference genomes 
 
