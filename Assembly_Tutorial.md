@@ -2,40 +2,53 @@ Assembly Tutorial
 =================
 
 ### Dependencies 
-- Kraken (with local download of minikrakenDB) *
+- Kraken (with local download of minikrakenDB)
 - Samtools 1.2
 - BWA
 - SPAdes
 - Prokka
-- Mauve (no need for installation we just need to know path to jar file and linux binaries) *
+- Mauve
 - Tablet 
-- Fastqc *
-- Quast *
-- Bandage *
+- Fastqc
+- Quast
+- Bandage
  
 # Summary
 
 For this tutorial we will be rigourously QCing and assembling a bacterial genome. 
 
-The example genomes we will be using are *Renibacterium salmoninarum* taken from this paper - [Microevolution of *Renibacterium salmoninarum*: evidence for intercontinental dissemination associated with fish movements](http://www.nature.com/ismej/journal/v8/n4/full/ismej2013186a.html)
+The example genomes we will be using are *Renibacterium salmoninarum* isolates taken from this publication - [Microevolution of *Renibacterium salmoninarum*: evidence for intercontinental dissemination associated with fish movements](http://www.nature.com/ismej/journal/v8/n4/full/ismej2013186a.html)
 
-We will be using the finished referenece genome ATCC_33209 from - [Genome sequence of the fish pathogen *Renibacterium salmoninarum* suggests reductive evolution away from an environmental Arthrobacter ancestor.](http://www.ncbi.nlm.nih.gov/pubmed/18723615). This has been reannottated for you with Prokka. 
+We will be using the finished reference genome ATCC_33209 from - [Genome sequence of the fish pathogen *Renibacterium salmoninarum* suggests reductive evolution away from an environmental Arthrobacter ancestor.](http://www.ncbi.nlm.nih.gov/pubmed/18723615). This has been reannottated for you with Prokka. 
 
 The workflow will be as follows:
 - Taxonomic assignment of reads.
 - QC of raw reads including adapter removal and trimming and filtering.
 - Removal of known contaminants.
-- Assembly using SPAdes
+- Assembly using SPAdes.
 - Contig QC including length filtering, read coverage filtering and taxonomic identification. 
-- Contig annotation, visualisation and QC.  
+- Contig annotation, visualisation and QC.
 
 
 # Assembly and Annotation
 
 For this exercise we will assemble a bacterial genome and rigorously QC it. 
 
-Each of you will be provided with a selection of *Renibacterium* genomes to assemble and annotate
-*** see list
+Each of you will be provided with a selection of *Renibacterium* genomes to assemble and annotate. 
+
+You will have copied the files for the project into your work directory in the previous session. Each group will be assigned a sample to assemble from the Wednesday18thMay/Renibacterium/Fastq/ folder.
+
+
+| Group Number | Student A | Student B | Student C |
+| ------------ | ----------| --------- | --------- |
+| 1 | Jenni Lehtimäki | Katariina Pärnänen | Tero Tuomivirta | 
+| 2 | Jing Cheng | Lijuan Yan | Kirsi Hyytiäinen |
+|3|  Alejandra Culebro  |  Rouger Amelie | Mohammad Jaber Alipour|
+|4|      Julija Svirskaite     |                    Hanna Castro              |                Anniina Jaakkonen|
+|5|      Seyed Abdollah Mousavi  |      Sajan Raju                             |       Outi-Maaria Sietiö|
+|6|      Noora Ottman             |            Ann-Katrin Llarena               |      Minna Santalahti|
+|7|      Egle   Kudirkiene         |             Jani Halkilahti |
+
 
 *Make a directory for your sample of interest and download/move the fastq.gz files to this directory.* 
 
