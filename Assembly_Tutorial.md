@@ -424,8 +424,8 @@ mauve alignment OR java -jar ~/Path/to/mauve_snapshot_2015-02-13/Mauve.jar align
 The window shows the alignment between our contigs and the reference  genome. Zoom in on the alignment sections where there is no alignments between our contigs and the reference. 
 
 Questions:
-- Is there any commonality between these regions? 
-- Do any contigs not align? Blast them and see what they are. 
+- _Is there any commonality between these regions?_
+- _Do any contigs not align? Blast them and see what they are._ 
 
 ### Map the reads to get final statistics 
 
