@@ -165,9 +165,9 @@ Remove the *kraken_installer* folder using
 
 The next step is to define **Kraken**'s database. It needs to be linked to a database to be able to classify sequences. In this course, we will use **MiniKrakenDB**, a reduced standard database constructed from complete bacterial, archaeal, and viral genomes in RefSeq (from 2014).
 
-To use **MiniKrakenDB**, first create a new directory in your *wrk* directory and download the database files.
+To use **MiniKrakenDB**, first create a new directory in your *course_data* directory and download the database files.
 
-    cd /wrk/<username>
+    cd /wrk/<username>/course_data
     mkdir minikrakendb
     cd minikrakendb
     wget https://ccb.jhu.edu/software/kraken/dl/minikraken.tgz
@@ -177,7 +177,7 @@ Uncompress the *minikraken.tgz* file into the *minikrakendb* directory
     tar -zxf ./minikraken.tgz
     rm minikraken.tgz
 
-The database can now be accessed in the path`/wrk/<username>/minikrakendb/minikraken_20141208`
+The database can now be accessed in the path`/wrk/<username>/course_data/minikrakendb/minikraken_20141208`
 
 **Kraken** usage will be covered at "*Hands-on/Lecture: Assembly module."*.
 
@@ -268,7 +268,7 @@ FigTree (http://tree.bio.ed.ac.uk/software/figtree/) is a graphical viewer of ph
 
 To run the application, use the command
 
-    cd /wrk/<username>/shared_all/Wednesday18thMay/FigTree_v1.4.2
+    cd /wrk/<username>/course_data/shared_all/Wednesday18thMay/FigTree_v1.4.2
     #change <username> by your user account
 	
 	java -jar lib/figtree.jar
@@ -277,7 +277,7 @@ To run the application, use the command
 
 ### 11.Adding executables to the PATH
 
-Some of the programs can be added to the PATH so that their executables can be reachable without accessing to the particular folder where they are installed. **Kraken**, **FastTree** and **BEDtools** can be added to the PATH using
+Some of the programs can be added to the PATH so that their executables can be reachable without accessing to the particular folder where they are installed. **Kraken**, **FastTree**, **BEDtools** and **ReMatCh** can be added to the PATH using
 
     #Adding Kraken to PATH 
     export PATH="~/appl_taito/bact_pop_course/kraken:$PATH"
