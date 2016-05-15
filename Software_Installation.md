@@ -110,7 +110,7 @@ Data sets that will be used throughout the course are available in a shared fold
     rsync -rtv /wrk/mirossi/shared_all /wrk/<username>/course_data/
     #change <username> by your user account
  
- A copy of the shared data is know available at `/wrk/<username>/course_data/shared_all`.
+ A copy of the shared data is know available at `/wrk/<username>/course_data/shared_all` and can be modified.
  
 ###5. Installing QUAST
 
