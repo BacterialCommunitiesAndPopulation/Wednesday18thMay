@@ -231,9 +231,7 @@ ReMatCh usage will be covered later in the "*Hands-on/Lecture: ReMatch: using ma
 **chewBBACA** source code is available at GitHub and can be cloned to your user account. Start by creating a new folder and then clone the repository.
 
     cd ~/appl_taito/bact_pop_course
-    mkdir chewbbaca
-    cd chewbbaca
-    git clone https://github.com/mickaelsilva/chewBBACA.git .
+    git clone https://github.com/mickaelsilva/chewBBACA.git
 
 chewBBACA usage will be covered on "*Hands-on: assembly + allele call campy data.*".
 
