@@ -199,7 +199,7 @@ The database can now be accessed in the path`/wrk/<username>/course_data/minikra
  
  We are now in the **ReMatCh** version that will be used in the course. 
 
-ReMatCh requires BEDtools (> v.2.17), a version that is not available by default in the **biokit** module. In this tutorial it will be available in the course shared directory on `wrk/<username>/shared/Friday20thMay/dependencies/bedtools2`
+ReMatCh requires BEDtools (> v.2.17), a version that is not available by default in the **biokit** module. In this tutorial it will be available in the course shared directory on `wrk/<username>/course_data/shared_all/Friday20thMay/dependencies/bedtools2`
 
 However, you can install it by creating a new directory to include BEDtools.
 
@@ -233,7 +233,7 @@ ReMatCh usage will be covered later in the "*Hands-on/Lecture: ReMatch: using ma
     cd ~/appl_taito/bact_pop_course
     mkdir chewbbaca
     cd chewbbaca
-    git clone https://github.com/mickaelsilva/bacterial_wgMLST.git .
+    git clone https://github.com/mickaelsilva/chewBBACA.git .
 
 chewBBACA usage will be covered on "*Hands-on: assembly + allele call campy data.*".
 
@@ -277,32 +277,42 @@ To run the application, use the command
 
 ### 11.Adding executables to the PATH
 
-Some of the programs can be added to the PATH so that their executables can be reachable without accessing to the particular folder where they are installed. **Kraken**, **FastTree**, **BEDtools** and **ReMatCh** can be added to the PATH using
+To add the previously installed software to the PATH so that their executables can be reachable without accessing to the folder they are installed, open the *source_course_path* file with the command
 
-    #Adding Kraken to PATH 
-    export PATH="~/appl_taito/bact_pop_course/kraken:$PATH"
+`nano /wrk/<username>/course_data/shared_all/Friday20thMay/dependencies/source_course_path`
+
+Change the line
+
+    your_username='<username>' #change <username> by your user account
+
+And replace `<username>` by your user account. After that, exit from nano using ctrl+X. 
+
+Copy the *source_course_path* to your *appl_taito* directory with the command
+
+    cp /wrk/<username>/course_data/shared_all/Friday20thMay/dependencies/source_course_path ~/appl_taito
     
-    #Adding FastTree to PATH
-    export PATH="~/appl_taito/bact_pop_course/FastTree:$PATH"
-    
-    #Adding BEDtools to PATH
-    export PATH="/wrk/<username>/shared_all/Friday20thMay/dependencies/bedtools2/bin:$PATH"
-    #change <username> by your user account
-    
-    #Adding QUAST to PATH
-    export PATH="~/appl_taito/bact_pop_course/quast-4.0:$PATH"
-    
-    #Adding ReMatCh to PATH
-    export PATH="~/appl_taito/bact_pop_course/ReMatCh:$PATH"
-    
-    
+    #replace <username> by your user account
+
+Load the file with the command
+
+    cd ~/appl_taito
+    source source_course_path
+
+The installed programs are now available from any directory. 
 
 **NOTE**: This step must be made every time a new session is started.
 
-For **chewBBACA** you still have to access to them directly on their installed directories.
-	
-	#Full path for chewBBACA allele call
-	~/appl_taito/bact_pop_course/chewbbaca/allele call/cds_based/alleleCalling_ORFbased_protein_main3_local.py
-	
-	#Full path for chewBBACA CreateSchema
-	~/appl_taito/bact_pop_course/chewbbaca/allele call/cds_based/alleleCalling_ORFbased_protein_main3_local.py
+**FigTree** is not available in the PATH. As so, to run it, use the command 
+
+    java -jar /wrk/<username>/course_data/shared_data/Wednesday18thMay/FigTree_v1.4.2/lib/figtree.jar
+
+###Software full paths
+
+- **kraken** `~/appl_taito/bact_pop_course/kraken`
+- **kraken_build** `~/appl_taito/bact_pop_course/kraken_build`
+- **FastTree** `~/appl_taito/bact_pop_course/FastTree/FastTree`
+- **BEDtools** `/wrk/<username>/course_data/shared_all/Friday20thMay/dependencies/bedtools2/bin/bedtools`
+- **QUAST** `~/appl_taito/bact_pop_course/quast-4.0/quast.py`
+- **ReMatCh** `~/appl_taito/bact_pop_course/ReMatCh/rematch.py`
+- **chewBBACA** `~/appl_taito/bact_pop_course/chewbbaca/`
+
