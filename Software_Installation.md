@@ -226,7 +226,7 @@ ReMatCh usage will be covered later in the "*Hands-on/Lecture: ReMatch: using ma
 
 ###8. Installing Allele Call scripts (chewBBACA) 
 
-**chewBBACA** (proposed name) (https://github.com/mickaelsilva/bacterial_wgMLST) is a tool with a set of scripts to perform bacterial *wgMLST*/*cgMLST*. It will be used to define and assign unique numeric allelic profiles for each query genome by comparison with reference sequences.
+**chewBBACA** (proposed name) (https://github.com/mickaelsilva/chewBBACA) is a tool with a set of scripts to perform bacterial *wgMLST*/*cgMLST*. It will be used to define and assign unique numeric allelic profiles for each query genome by comparison with reference sequences.
 
 **chewBBACA** source code is available at GitHub and can be cloned to your user account. Start by creating a new folder and then clone the repository.
 
@@ -313,4 +313,5 @@ The installed programs are now available from any directory.
 - **QUAST** `~/appl_taito/bact_pop_course/quast-4.0/quast.py`
 - **ReMatCh** `~/appl_taito/bact_pop_course/ReMatCh/rematch.py`
 - **chewBBACA** `~/appl_taito/bact_pop_course/chewbbaca/`
+- **FigTree** `/wrk/<username>/course_data/shared_data/Wednesday18thMay/FigTree_v1.4.2/lib/figtree.jar`
 
