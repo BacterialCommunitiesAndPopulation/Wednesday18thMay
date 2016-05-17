@@ -32,6 +32,19 @@ The workflow will be as follows:
 - Contig QC including length filtering, read coverage filtering and taxonomic identification. 
 - Contig annotation, visualisation and QC.
 
+#Using TAITO
+
+Before we begin log into the taito in a non-interactive shell using `ssh username@taito.csc.fi`
+
+```
+# Make an interactive instance.
+screen -S WorkingSession
+sinteractive
+
+# Load the appropriate modules
+module load biokit
+module load prokka  
+```
 
 # Assembly and Annotation
 
@@ -53,7 +66,7 @@ You will have copied the files for the project into your work directory in the p
 
 *Make a directory for your sample of interest and download/move the fastq.gz files to this directory.* 
 
-We will be taking notes on some assembly statistics in order to make comparisons between samples. The working spreadsheet can be found at [https://drive.google.com/open?id=1YLvRdQr3vvNlpv6tBEQBPSQwzkuHCCP9kfO6RN4_9i4](https://drive.google.com/open?id=1YLvRdQr3vvNlpv6tBEQBPSQwzkuHCCP9kfO6RN4_9i4).
+We will be taking notes on some assembly statistics in order to make comparisons between samples. The working spreadsheet can be found at [here](https://drive.google.com/open?id=1YLvRdQr3vvNlpv6tBEQBPSQwzkuHCCP9kfO6RN4_9i4).
 
 ## Read QC
 
@@ -134,6 +147,12 @@ We can assign the raw reads to a database of genomes in order to see if they are
 Kraken will try to assign an each reads to a sequence from a database (in this case the MinKrakenDB provided with the software, a reduced version of the NCBI reference genome collection)
 
 ```
+# Export the Kraken Path
+export PATH=$PATH:~/appl_taito/bact_pop_course/kraken_installer
+
+# If you want to check that kraken is in your path type 
+echo $PATH
+
 # Preload database and assign reads 
 kraken --preload --db /Path/to/MiniKraken/ ERR327970_1.paired.fastq.gz ERR327970_2.paired.fastq.gz --threads 6 --paired --output kraken_result 
 
@@ -148,7 +167,7 @@ The top taxonomic assignment for our reads is Renibacterium. We also have a larg
 
 ### Remove Contaminants
 
-From the Kraken output it is clear we have some PhiX sequences in our sample. PhiX is used as a calibration control during Illumina sequencing. We will want to remove these reads before assembly. This can be considered a model contaminant. Note that this approach would be equally valid for other known contaminants.  
+From the Kraken output it is clear we have some PhiX sequences in our sample. PhiX is used as a calibration control during Illumina sequencing. We will want to remove these reads before assembly. We will considered this as a model contaminant. Note that this approach would be equally valid for other known contaminants.  
 
 We will map the reads to the PhiX genome sequence. We will then filter all of the reads that matched PhiX and convert our files back to .fastq format for assembly. 
 
@@ -208,6 +227,10 @@ We can compare the contigs and scaffolds quantitative way using a program called
 ```
 mkdir Contig_QC
 
+# export quast path
+export PATH=$PATH:~/appl_taito/bact_pop_course/quast-4.0
+
+# Run quast
 quast.py -t 6 -R ATCC_33209.fasta Assembly/contigs.fasta Assembly/scaffolds.fasta -o Contig_QC/RawContigs
 ```
 
@@ -241,30 +264,37 @@ The header of each contig will have the format NODE_X_length_Y_cov_Z
 Again, we will use kraken:
 
 ```
+# Export the Kraken Path
+export PATH=$PATH:~/appl_taito/bact_pop_course/kraken_installer
+
+# Run Kraken
 kraken --preload --db path/to/MiniKraken/ Assembly/contigs.fasta --threads 6 --output kraken_result_contigs
 kraken-translate --db path/to/MiniKraken/ kraken_result_contigs > sequence_contigs.labels
 awk '{print $4}' sequence_contigs.labels | sort | uniq -c | sort -nr # Summary (Save with > file.txt appended to end)
 ```
 
-Contamination of sample with even a small amount of exogenous DNA is an ever present problem in WGS. For an example of teh impact that it can have on research you can see the [Tartigrade genome story](http://www.igs.umaryland.edu/labs/hotopp/2015/12/05/quick-look-at-the-two-manuscripts-on-tardigrade-lgt/)
+Contamination of sample with even a small amount of exogenous DNA is an ever present problem in WGS. For an example of the impact that it can have on research you can see the [Tartigrade genome story](http://www.igs.umaryland.edu/labs/hotopp/2015/12/05/quick-look-at-the-two-manuscripts-on-tardigrade-lgt/)
 Very sensitive assemblers such as SPAdes, which assembles over a range of k-mer and read coverages it can be especially problematic. 
 However, with a little post processing of the contigs we can usually deal with small to moderate amounts of contamination.
 
-#### Visualise assembly graph
+#### Visualise assembly graph [Optional]
 
 [Bandage](https://rrwick.github.io/Bandage/) allows us to visualise the assembly graph. This can be used to visualise connected sequences that nevertheless get labelled as separate contigs because their position cannot be resolved by the assembler. 
 
 Bandage can also be used to resolve assembly error, insertion of large tracks of DNA and DNA repeats. It is a useful tool. 
 
 Using your sftp client (e.g. WinSCP or Filezilla) copy assembly_graph.fastg to your local machine. 
+
+Download the appropriate [executable](http://rrwick.github.io/Bandage/) from your operating system. 
+
 ```
 Either:
 
 open bandage and load assembly_graph.fastg
 
-OR 
+OR on Linux/Mac
 
-Bandage load assembly_graph.fastg
+/Path/To/Bandage load assembly_graph.fastg
 
 click 'draw graph'
 ```
@@ -354,6 +384,10 @@ grep "^>" contigs.c_l_filtered.fasta | wc -l
 What species do these contigs represent? *Run Kraken again*
 
 ```
+# Export the Kraken Path
+export PATH=$PATH:~/appl_taito/bact_pop_course/kraken_installer
+
+# Run kraken
 kraken --preload --db path/to/MiniKraken/ contigs.c_l_filtered.fasta --threads 6 --output kraken_result_contigs_postfilter
 kraken-translate --db path/to/MiniKraken/ kraken_result_contigs_postfilter > sequence_contigs_postfilter.labels
 awk '{print $4}' sequence_contigs_postfilter.labels | sort | uniq -c | sort -nr # Summary (Save with > file.txt appended to end)
@@ -361,7 +395,7 @@ awk '{print $4}' sequence_contigs_postfilter.labels | sort | uniq -c | sort -nr 
 
 Our assembly should be looking much better at this point. If it isn't then we may need to use stricter thresholds or input filter our reads to a better quality. 
 
-### Adding Annotation
+### Adding Annotation [The following section is for **THURSDAY**]
 Having a 'final' assembly is good, but having it annotated is even better for comparison. This will let us know what parts of the genome are missing/different between our strains and reference strains. 
 
 For this purpose we will use Prokka, which annotates our strain in a few minutes from reference databases.  
@@ -373,7 +407,7 @@ prokka --outdir Annotation --force --cpus 8 --addgenes --prefix ERR327970 --genu
 ```
 This should take a few minutes and will produce a folder in the output directory containing annotation information. We will be using the .gff and.gbk files for further QC. 
 
-### Comparing the contigs to a reference. 
+### Comparing the contigs to a reference
 
 Lets run quast again and see what our 'final' assembly compares to the unfiltered one. 
 
@@ -390,7 +424,7 @@ Use ERR3279*.gff_gaps.txt to answer the question:
 - _Which CDSs were not detected in our sample?_ 
 - _Is there a trend in the missing genes?_
 
-### Visually comparing contigs to reference genomes 
+### Visually comparing contigs to reference genomes [Optional]
 
 We can visualise the contigs relative to a reference to aid comparison. 
 
@@ -403,7 +437,7 @@ This can be performed using a number of tools (Artemis/IGV/Mauve/ACT/Tablet). We
 wget darlinglab.org/mauve/snapshots/2015/2015-02-13/linux-x64/mauve_linux_snapshot_2015-02-13.tar.gz
 tar -vxzf mauve_linux_snapshot_2015-02-13.tar.gz
 
-# Use th path of the directory in which you just downloaded the jar file in the command below. 
+# Use the path of the directory in which you just downloaded the jar file in the command below. 
 
 java -Djava.awt.headless=true -Xmx8000m -cp /opt/mauve/mauve_snapshot_2015-02-13/Mauve.jar org.gel.mauve.contigs.ContigOrderer -output "Ordered_contigs" -ref ../ATCC_33209.gb -draft contigs.c_l_filtered.fasta
 ```
@@ -412,6 +446,7 @@ Find the highest iterated in the Ordered_contigs folder.
 progressiveMauve --output=alignment ../ATCC_33209.gb Ordered_contigs/alignment3/contigs.c_l_filtered.fasta
 
 # Visualise
+# Download mauve to your local machine and click the executable 
 Windows/Mac - Using your sftp client (e.g. WinSCP or Filezilla) copy the mauve alignment files to your local machine and open them in Mauve.
 
 OR on linux:
@@ -425,7 +460,7 @@ Questions:
 - _Is there any commonality between these regions?_
 - _Do any contigs not align? Blast them and see what they are._ 
 
-### Map the reads to get final statistics 
+### Map the reads to get final statistics [Optional]
 
 Now we have our 'final' assembly we want to remap our reads to it to generate some final statistics. 
 
@@ -436,9 +471,12 @@ cp Ordered_contigs/alignment3/contigs.c_l_filtered.fasta ../Mapping_Final/contig
 cd ../Mapping_Final/
 bwa index contigs.fasta
 bwa mem -t 6 contigs.fasta ../ERR327970_1.paired.fastq.gz ../ERR327970_2.paired.fastq.gz | samtools view -@ 6 -T contigs.fasta -bS - | samtools sort -@ 6 -T contigs.bwa -o contigs.bwa.bam -
-	
-samtools stats contigs.bwa.bam > contigs.stats # save stats
-samtools depth contigs.bwa.bam > contigs.coverage # get per base coverage 
+
+# Save stats
+samtools stats contigs.bwa.bam > contigs.stats
+
+# Get per base coverage 
+samtools depth contigs.bwa.bam > contigs.coverage
 	
 # Get some mapping stats
 grep "^SN" contigs.stats
