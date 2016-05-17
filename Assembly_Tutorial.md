@@ -44,14 +44,12 @@ You will have copied the files for the project into your work directory in the p
 
 | Group Number | Student A | Student B | Student C | Sample | 
 | ------------ | ----------| --------- | --------- | ------ | 
-| 1 | Jenni Lehtimäki | Katariina Pärnänen | Tero Tuomivirta | ERR327907 |
-| 2 | Jing Cheng | Lijuan Yan | Kirsi Hyytiäinen | ERR327908 | 
-|3|  Alejandra Culebro  |  Rouger Amelie | Mohammad Jaber Alipour| ERR327920 |
+| 1 | Jenni Lehtimäki | Katariina Pärnänen | Outi-Maaria Sietiö | ERR327907 |
+| 2 | Jing Cheng | Lijuan Yan | Alejandra Culebro | ERR327908 | 
+|3|  Egle   Kudirkiene  |  Rouger Amelie | Jani Halkilahti| ERR327920 |
 |4|      Julija Svirskaite     |                    Hanna Castro              |                Anniina Jaakkonen| ERR327957 |
-|5|      Seyed Abdollah Mousavi  |      Sajan Raju                             |       Outi-Maaria Sietiö| ERR327956|
+|5|      Mohammad Jaber Alipour  |      Sajan Raju                             |       Tero Tuomivirta| ERR327956|
 |6|      Noora Ottman             |            Ann-Katrin Llarena               |      Minna Santalahti| ERR327952|
-|7|      Egle   Kudirkiene         |             Jani Halkilahti | | ERR327965 | 
-
 
 *Make a directory for your sample of interest and download/move the fastq.gz files to this directory.* 
 
