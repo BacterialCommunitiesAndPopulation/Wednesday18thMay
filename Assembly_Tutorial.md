@@ -32,7 +32,7 @@ The workflow will be as follows:
 - Contig QC including length filtering, read coverage filtering and taxonomic identification. 
 - Contig annotation, visualisation and QC.
 
-#Using TAITO
+###Using TAITO
 
 Before we begin log into the taito in a non-interactive shell using `ssh username@taito.csc.fi`
 
@@ -45,6 +45,11 @@ sinteractive
 module load biokit
 module load prokka  
 ```
+
+If you need to close/suspend your computer and keep and processes running on the node you can press Ctrl+A+D to detach the screen. 
+
+To reattach to your session use the command `screen -r WorkingSession`
+
 
 # Assembly and Annotation
 
