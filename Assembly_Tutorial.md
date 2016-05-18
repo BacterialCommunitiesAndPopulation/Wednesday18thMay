@@ -159,7 +159,7 @@ export PATH=$PATH:~/appl_taito/bact_pop_course/kraken_installer
 echo $PATH
 
 # Preload database and assign reads 
-kraken --preload --db /Path/to/MiniKraken/ ERR327970_1.paired.fastq.gz ERR327970_2.paired.fastq.gz --threads 6 --paired --output kraken_result 
+kraken --preload --db /Path/to/MiniKraken/ ERR327970_1.paired.fastq.gz ERR327970_2.paired.fastq.gz --threads 4 --paired --output kraken_result 
 
 # Convert IDs to usable taxonomic labels.
 kraken-translate --db /Path/to/MiniKraken/ kraken_result > sequences.labels
@@ -181,14 +181,14 @@ We will map the reads to the PhiX genome sequence. We will then filter all of th
 bwa index ../phiX.fasta
 
 # Map your reads to the phiX genome 
-bwa mem -t 6 ../phiX.fasta ERR327970_1.paired.fastq.gz ERR327970_2.paired.fastq.gz > ERR327970.phiX_mapping.sam
+bwa mem -t 4 ../phiX.fasta ERR327970_1.paired.fastq.gz ERR327970_2.paired.fastq.gz > ERR327970.phiX_mapping.sam
 
 # Generate some mapping stats
 samtools flagstat ERR327970.phiX_mapping.sam > contam.stats
 grep "^SN" contam.stats
 
 # Extract only reads that DID NOT map to the phiX (-f 12) 
-samtools view -@ 6 -f 12 -T ../phiX.fasta -bSu ERR327970.phiX_mapping.sam | samtools sort -@ 6 -T temp.bwa -O bam - | samtools bam2fq -s temp.fq - > ERR327970.phiX_filtered.fastq
+samtools view -@ 6 -f 12 -T ../phiX.fasta -bSu ERR327970.phiX_mapping.sam | samtools sort -@ 4 -T temp.bwa -O bam - | samtools bam2fq -s temp.fq - > ERR327970.phiX_filtered.fastq
 
 # Filter your reads to seperate files. 
 grep -A3 "^@.*/1$" ERR327970.phiX_filtered.fastq > ERR327970_1.filtered.fastq
@@ -214,7 +214,7 @@ cp Read_QC/ERR327970_2.filtered.fastq.gz ./
 
 # Assemble using spades
 
-spades.py -t 6 --pe1-1 ERR327970_1.filtered.fastq.gz --pe1-2 ERR327970_2.filtered.fastq.gz --careful -o Assembly/
+spades.py -t 4 --pe1-1 ERR327970_1.filtered.fastq.gz --pe1-2 ERR327970_2.filtered.fastq.gz --careful -o Assembly/
 
 ```
 
@@ -236,7 +236,7 @@ mkdir Contig_QC
 export PATH=$PATH:~/appl_taito/bact_pop_course/quast-4.0
 
 # Run quast
-quast.py -t 6 -R ATCC_33209.fasta Assembly/contigs.fasta Assembly/scaffolds.fasta -o Contig_QC/RawContigs
+quast.py -t 4 -R ATCC_33209.fasta Assembly/contigs.fasta Assembly/scaffolds.fasta -o Contig_QC/RawContigs
 ```
 
 Quast generates a number of assembly statistic quickly and compares the assemblies to the reference genome (-R). It can be run without a reference genome to generate just the assembly statistics. 
@@ -273,7 +273,7 @@ Again, we will use kraken:
 export PATH=$PATH:~/appl_taito/bact_pop_course/kraken_installer
 
 # Run Kraken
-kraken --preload --db path/to/MiniKraken/ Assembly/contigs.fasta --threads 6 --output kraken_result_contigs
+kraken --preload --db path/to/MiniKraken/ Assembly/contigs.fasta --threads 4 --output kraken_result_contigs
 kraken-translate --db path/to/MiniKraken/ kraken_result_contigs > sequence_contigs.labels
 awk '{print $4}' sequence_contigs.labels | sort | uniq -c | sort -nr # Summary (Save with > file.txt appended to end)
 ```
@@ -325,7 +325,7 @@ cd Mapping
 bwa index contigs.fasta # index contig sequences
 
 # Map and sort the reads 
-bwa mem -t 6 contigs.fasta ../ERR327970_1.filtered.fastq.gz ../ERR327970_2.filtered.fastq.gz | samtools view -@ 6 -T contigs.fasta -bS - | samtools sort -@ 6 -T contigs.bwa -o contigs.bwa.bam -
+bwa mem -t 4 contigs.fasta ../ERR327970_1.filtered.fastq.gz ../ERR327970_2.filtered.fastq.gz | samtools view -@ 4 -T contigs.fasta -bS - | samtools sort -@ 4 -T contigs.bwa -o contigs.bwa.bam -
 
 # Generate mapping and coverage stats. 
 samtools stats contigs.bwa.bam > contigs.stats # Mapping stats
@@ -393,7 +393,7 @@ What species do these contigs represent? *Run Kraken again*
 export PATH=$PATH:~/appl_taito/bact_pop_course/kraken_installer
 
 # Run kraken
-kraken --preload --db path/to/MiniKraken/ contigs.c_l_filtered.fasta --threads 6 --output kraken_result_contigs_postfilter
+kraken --preload --db path/to/MiniKraken/ contigs.c_l_filtered.fasta --threads 4 --output kraken_result_contigs_postfilter
 kraken-translate --db path/to/MiniKraken/ kraken_result_contigs_postfilter > sequence_contigs_postfilter.labels
 awk '{print $4}' sequence_contigs_postfilter.labels | sort | uniq -c | sort -nr # Summary (Save with > file.txt appended to end)
 ```
@@ -408,7 +408,7 @@ For this purpose we will use Prokka, which annotates our strain in a few minutes
 cd ../
 
 awk '/^>/{print ">" ++i; next}{print}' < Mapping/contigs.fasta > ERR327970.spades_contigs.fasta  # avoids a prokka error with long file names. 
-prokka --outdir Annotation --force --cpus 8 --addgenes --prefix ERR327970 --genus Renibacterium --species salmoninarum ERR327970.spades_contigs.fasta
+prokka --outdir Annotation --force --cpus 4 --addgenes --prefix ERR327970 --genus Renibacterium --species salmoninarum ERR327970.spades_contigs.fasta
 ```
 This should take a few minutes and will produce a folder in the output directory containing annotation information. We will be using the .gff and.gbk files for further QC. 
 
@@ -417,7 +417,7 @@ This should take a few minutes and will produce a folder in the output directory
 Lets run quast again and see what our 'final' assembly compares to the unfiltered one. 
 
 ```
-quast.py -t 6 -o Contig_QC/Final -R ATCC_33209.fasta -G Annotation/ATCC-33209.gff ERR327970.spades_contigs.fasta
+quast.py -t 4 -o Contig_QC/Final -R ATCC_33209.fasta -G Annotation/ATCC-33209.gff ERR327970.spades_contigs.fasta
 ```
 
 The use of -G *.ggf  also allows for the comparison of our annotated genome to the annotation of the reference. 
@@ -475,7 +475,7 @@ cp Ordered_contigs/alignment3/contigs.c_l_filtered.fasta ../Mapping_Final/contig
 
 cd ../Mapping_Final/
 bwa index contigs.fasta
-bwa mem -t 6 contigs.fasta ../ERR327970_1.paired.fastq.gz ../ERR327970_2.paired.fastq.gz | samtools view -@ 6 -T contigs.fasta -bS - | samtools sort -@ 6 -T contigs.bwa -o contigs.bwa.bam -
+bwa mem -t 4 contigs.fasta ../ERR327970_1.paired.fastq.gz ../ERR327970_2.paired.fastq.gz | samtools view -@ 4 -T contigs.fasta -bS - | samtools sort -@ 4 -T contigs.bwa -o contigs.bwa.bam -
 
 # Save stats
 samtools stats contigs.bwa.bam > contigs.stats
