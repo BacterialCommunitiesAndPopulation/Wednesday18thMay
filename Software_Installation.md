@@ -15,25 +15,19 @@ In this first module we will set up your CSC user area with all the software and
  7. Installing ReMatCh
  8. Installing Allele Call scripts (chewBBACA) 
  9. Installing FastTree
- 10. Installing FigTree
- 11. Adding executables to the PATH
+ 10. Adding executables to the PATH
 
-###1. Accessing to the CSC user account
+###1. Accessing to Taito
 
-In this course we will use CSC's Taito SuperCluster to run our jobs.
+Before we begin log into the taito in a non-interactive shell using ssh
 
- - **Taito Shell** (*taito-shell*) - Sequencial jobs, non-CPU-intensive workloads.
- - **Taito** (*taito*) - Parallel jobs,  CPU-intensive workloads.
-
-In this installation guide we will log in to *taito-shell*. Open a Terminal window and access to your user account using the ssh (Secure Shell) command.
-
-    ssh <username>@taito-shell.csc.fi
-     
+    ssh <username>@taito.csc.fi
     #change <username> by your user account
-
-Or configure PuTTY (Windows) with the host name *taito-shell.csc.fi* and your username.
-
-After typing your password, you will be redirected to your user area on Taito super cluster. 
+    
+    # Make an interactive instance.
+    screen -S software_installation
+    sinteractive
+     
 
 For the purpose of the course and to organize the following software installation, start by creating a new folder on the *appl_taito* directory where you will store all programs.
 
@@ -64,7 +58,7 @@ In the following sections we will install other applications that do not make pa
 
 ###3. Installing Python modules
 
-Some of the following programs are written in Python programming language and have some dependencies that need to be installed: 
+Some of the following programs are written in Python programming language. As so, some dependencies need to be installed for those programs o work: 
 
  - Biopython (http://biopython.org/wiki/Biopython)
  - HTseq (http://www-huber.embl.de/HTSeq/doc/overview.html)
@@ -97,20 +91,33 @@ To install our program's dependencies, run
     python -m pip.__main__ install numpy --user --upgrade
     python -m pip.__main__ install matplotlib --user --upgrade
 
-Since some of the dependencies are already installed, upgrade we upgraded it to the newest version with the command *--upgrade*
+Since some of the dependencies are already installed, we upgraded them to the newest version with the command *--upgrade*
 
     python -m pip.__main__ install numpy --upgrade --user
 
 ###4. Access to the course data sets
 
-Data sets that will be used throughout the course are available in a shared folder. **DO NOT modify the shared folder directly**. To access to the data, sync the contents of the shared folder to your *wrk* directory using the command
+Data sets that will be used throughout the course are available in a shared folder. **DO NOT modify the shared folder directly**. To access to the data, sync the contents of the shared folder to your *wrk* directory.
+
+Since copying all shared files will take some time, first detach from your current screen using `Crtl + A + D`. Next, create a new screen that will be used to copy the shared files using the command
+
+    screen -S copy_shared
+    sinteractive
+
+Sync the shared folder into a new folder called *course_data* with the commands
 
     cd /wrk/<username>
     mkdir course_data
     rsync -rtv /wrk/mirossi/shared_all /wrk/<username>/course_data/
+    
     #change <username> by your user account
  
- A copy of the shared data is know available at `/wrk/<username>/course_data/shared_all` and can be modified.
+ After copying the files, of shared data will be available at `/wrk/<username>/course_data/shared_all` and can be modified.
+
+Return to the *software_installation* screen by detaching from the current one using `Crtl + A + D` and by typing the command
+
+    screen -R software_installation 
+
  
 ###5. Installing QUAST
 
@@ -199,29 +206,6 @@ The database can now be accessed in the path`/wrk/<username>/course_data/minikra
  
  We are now in the **ReMatCh** version that will be used in the course. 
 
-ReMatCh requires BEDtools (> v.2.17), a version that is not available by default in the **biokit** module. In this tutorial it will be available in the course shared directory on `wrk/<username>/course_data/shared_all/Friday20thMay/dependencies/bedtools2`
-
-However, you can install it by creating a new directory to include BEDtools.
-
-    cd ~/appl_taito/bact_pop_course 
-    mkdir bedtools-2.25.0
-
-Then, download its source code 
-
-    cd bedtools-2.25.0
-    wget https://github.com/arq5x/bedtools2/releases/download/v2.25.0/bedtools-2.25.0.tar.gz
-
-Extract the *bedtools-2.25.0.tar.gz* file using
-
-    tar -xf bedtools-2.25.0.tar.gz
-    rm bedtools-2.25.0.tar.gz
-
-Install the software by accessing to the newly created *bedtools2* folder and by typing the *make* command.
-
-    cd bedtools2
-    make
-    #This will compile the software so that it can be used.
-
 ReMatCh usage will be covered later in the "*Hands-on/Lecture: ReMatch: using mapping approaches for AMR/virulence gene finding from reads.*".
 
 ###8. Installing Allele Call scripts (chewBBACA) 
@@ -260,22 +244,16 @@ After the download is completed, we need to install **FastTree** itself. We do t
 
 **FastTree** will be covered on "*Hands-on: working with recombinant population (some-up working-groups results and population analysis)*".
 
-###10. Installing FigTree
 
-FigTree (http://tree.bio.ed.ac.uk/software/figtree/) is a graphical viewer of phylogenetic trees. Its source code is available at `/wrk/<username>/shared_all/Wednesday18thMay/FigTree_v1.4.2`
+### 10.Adding executables to the PATH
 
-To run the application, use the command
+To add the previously installed software to the PATH so that their executables can be reachable without accessing to the folder they are installed. To do that, copy the *source_course_path* to your *appl_taito* directory with the command
 
-    cd /wrk/<username>/course_data/shared_all/Wednesday18thMay/FigTree_v1.4.2
-    #change <username> by your user account
-	
-	java -jar lib/figtree.jar
+    cp /wrk/<username>/course_data/shared_all/Friday20thMay/dependencies/source_course_path ~/appl_taito
+    
+    #replace <username> by your user account open the *source_course_path* file with the command
 
-**FigTree** will be used at *Hands-on: working with clonal population (using Renibacterium data)*.
-
-### 11.Adding executables to the PATH
-
-To add the previously installed software to the PATH so that their executables can be reachable without accessing to the folder they are installed, open the *source_course_path* file with the command
+Then, open the file with the command
 
 `nano /wrk/<username>/course_data/shared_all/Friday20thMay/dependencies/source_course_path`
 
@@ -283,13 +261,7 @@ Change the line
 
     your_username='<username>' #change <username> by your user account
 
-And replace `<username>` by your user account. After that, exit from nano using ctrl+X. 
-
-Copy the *source_course_path* to your *appl_taito* directory with the command
-
-    cp /wrk/<username>/course_data/shared_all/Friday20thMay/dependencies/source_course_path ~/appl_taito
-    
-    #replace <username> by your user account
+And replace `<username>` by your user account. After that, exit from nano using `Ctrl+X`. 
 
 Load the file with the command
 
@@ -298,11 +270,8 @@ Load the file with the command
 
 The installed programs are now available from any directory. 
 
-**NOTE**: This step must be made every time a new session is started.
+####**NOTE**: This step must be made every time a new session is started.
 
-**FigTree** is not available in the PATH. As so, to run it, use the command 
-
-    java -jar /wrk/<username>/course_data/shared_data/Wednesday18thMay/FigTree_v1.4.2/lib/figtree.jar
 
 ###Software full paths
 
@@ -313,5 +282,28 @@ The installed programs are now available from any directory.
 - **QUAST** `~/appl_taito/bact_pop_course/quast-4.0/quast.py`
 - **ReMatCh** `~/appl_taito/bact_pop_course/ReMatCh/rematch.py`
 - **chewBBACA** `~/appl_taito/bact_pop_course/chewbbaca/`
-- **FigTree** `/wrk/<username>/course_data/shared_data/Wednesday18thMay/FigTree_v1.4.2/lib/figtree.jar`
 
+###Extras
+
+ReMatCh requires BEDtools (> v.2.17), a version that is not available by default in the **biokit** module. In this tutorial it will be available in the course shared directory on `wrk/<username>/course_data/shared_all/Friday20thMay/dependencies/bedtools2`
+
+However, you can install it by creating a new directory to include BEDtools.
+
+    cd ~/appl_taito/bact_pop_course 
+    mkdir bedtools-2.25.0
+
+Then, download its source code 
+
+    cd bedtools-2.25.0
+    wget https://github.com/arq5x/bedtools2/releases/download/v2.25.0/bedtools-2.25.0.tar.gz
+
+Extract the *bedtools-2.25.0.tar.gz* file using
+
+    tar -xf bedtools-2.25.0.tar.gz
+    rm bedtools-2.25.0.tar.gz
+
+Install the software by accessing to the newly created *bedtools2* folder and by typing the *make* command.
+
+    cd bedtools2
+    make
+    #This will compile the software so that it can be used.
